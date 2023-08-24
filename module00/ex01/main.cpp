@@ -3,7 +3,8 @@
 int main (void)
 {
   Phonebook phonebook;
-  menu(phonebook);
+  while(1)
+    menu(phonebook);
   return 0;
 }
 
@@ -17,16 +18,15 @@ void menu(Phonebook phonebook)
   std::cout << "Input: ";
   std::getline(std::cin, input);
   if (input == "EXIT")
-    return;
+    exit(0);
   if (input == "ADD")
     addContact(phonebook);
   else if (input == "SEARCH")
     search(phonebook);
   else
-  {
     std::cout << "Invalid Input. Bye";
-    return;
-  }
+  input = "";
+  return ;
 }
 
 void addContact(Phonebook phonebook)
@@ -63,6 +63,12 @@ void search(Phonebook phonebook)
   std::string choice = "";
   Contact *contacts;
   int storedContacts = phonebook.getStoredContacts();
+  if (storedContacts == 0)
+  {
+    std::cout << "No contacts stored. Press key to continue\n";
+    std::getline(std::cin, choice);
+    return ;
+  }
   contacts = phonebook.getContacts();
   std::cout << "|  INDEX   |FIRST NAME|LAST NAME | NICKNAME |\n";
   while (i < storedContacts)
@@ -97,7 +103,7 @@ void search(Phonebook phonebook)
   }
   std::cout << "Input: ";
   std::getline(std::cin, choice);
-  if (choice.length() > 8)
+  if (choice.length() > 8 || choice.length() == 0)
     std::cout << "Wrong index\n";
   else
     printContact(choice.at(0), phonebook, storedContacts);
